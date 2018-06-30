@@ -48,7 +48,6 @@ class Place(Base):
             'description': self.description,
             'id': self.id,
             'price': self.price,
-            'restaurant_id': self.restaurant_id,
         }
 
 

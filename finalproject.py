@@ -334,7 +334,7 @@ def deletePlace(category_id, place_id):
 
 # Making an API endpoint (Get Request)
 @app.route('/thingstodo/JSON')
-def restaurantJSON():
+def categoryJSON():
     categories = session.query(PlaceCategory).all()
     # instead of returning a template return jsonify class that uses a for loop to serialize all db entries
     return jsonify(PlaceCategorys=[c.serialize for c in categories])
