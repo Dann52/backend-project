@@ -1,0 +1,24 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+<h1> New Thing to Do </h1>
+
+<form action="{{url_for('newPlace', category_id=category_id )}}" method = 'POST'>
+
+<p> Name: <input type='text' size='30' name='placeName'> </p>
+
+<p> Description: <textarea name='placeDescription' rows='5' cols='40'></textarea></p>
+
+<p> Cost: <input type='text' size='8' name='placePrice' ></p>
+
+
+<input type='submit' value='Create'>
+
+</form>
+
+</body>
+</html>

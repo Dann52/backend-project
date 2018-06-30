@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class = 'pane'>
+    <div class = 'header'>
+    <h1>{{category.name}}</h1>
+    </div>
+
+    <div class="edit-delete-create padding-bottom-20px">
+    <a href = '{{url_for('newPlace', category_id = category.id) }}'>
+    Create New Item</a> </div>
+
+<div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+    <!-- check to see if there are any flashed messages -->
+    {% if messages %}
+
+    {% for message in messages %}
+        <strong> {{message}} </strong>
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+{% for p in places %}
+
+<div class = 'name'> <h2>{{p.name}}</h2> </div>
+<div class = 'price'> <p> cost:  {{p.price}} </p> </div>
+<div class = 'description'> <p>{{p.description}}</p> </div>
+
+
+<div class = 'edit-delete-create'>
+<a href='{{url_for('editPlace', category_id = category.id, place_id=p.id) }}' > Edit /  </a>
+
+<a href='{{url_for('deletePlace', category_id = category.id, place_id=p.id) }}' > Delete </a>
+</div>
+
+
+{% endfor %}
+
+</div>
+
+
+</body>
+
+</html>

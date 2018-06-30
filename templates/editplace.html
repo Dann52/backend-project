@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+<h1> Edit Thing to Do </h1>
+
+<form action="{{url_for('editPlace', category_id=category_id, place_id=place_id)}}" method = 'POST'>
+
+
+<br><p>Name: <input type='text' size='50' name='placeName' placeholder='{{place.name}}'></p>
+
+<br><p> Description: </p>
+<p><textarea name = 'placeDescription' rows='5' cols='40' placeholder='{{place.description}}'></textarea></p>
+
+<br><p> Cost: <input type='text' size='10' name='placePrice' placeholder='{{place.price}}'></p>
+
+<br><input type='submit' value='Edit'>
+
+</form>
+
+<p class="cancel">
+ <a href = '{{url_for('categoryPlaces', category_id = category_id) }}'>
+ Cancel </a>
+</p>
+
+</body>
+</html>

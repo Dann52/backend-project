@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+                
+
+  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN 
+   Creates an anonymous function that inserts a script into the DOM of the login.html page -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=start"> </script>
+
+<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
+
+<script>
+        function signInCallback(authResult) {
+            // if authResult contains a parameter called code we know that the authorization with the google api server was successful, and the one time use code was created
+          if (authResult['code']) {
+            // Hide the sign-in button now that the user is authorized
+            $('#signinButton').attr('style', 'display: none');
+            // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+            $.ajax({
+              type: 'POST',
+              // pass the server state token as an argument to verify against the cross-site reference forgery attack
+              url: '/gconnect?state={{STATE}}',
+              // indicates that we don't want to jquery to process the response into a string
+              processData: false,
+              // specify the data that we're sending to our server - the one-time use code
+              data: authResult['code'],
+              contentType: 'application/octet-stream; charset=utf-8',
+              // if receive a success/200 result
+              success: function(result) {
+                // Handle or verify the server response if necessary.
+                if (result) {
+                    // if result, insert into div with id result the following html
+                  $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+                  // 4 second delay before redirecting to the noted directory
+                 setTimeout(function() {
+                  window.location.href = "/";
+                 }, 4000);
+                  
+              } 
+              // if error is received, output error to console.log
+              else if (authResult['error']) {
+            console.log('There was an error: ' + authResult['error']);
+          } else {
+                // if no response is returned, return the following html 
+                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                 }
+              }
+              
+          }); } }
+        </script>
+
+
+</head>
+
+
+<body>  
+
+<h2>Login to make changes to this website: </h2><br>
+
+<!-- GOOGLE PLUS SIGN IN BUTTON-->
+
+          
+          <div id="signinButton">
+        <!-- data-scope defines what google resources we want to access.  The data-redirecturi set to postmessage allows the one-time use code flow. The data-accesstype set to offline means the server can make requests to the google api server even if the user isn't logged in.  The data-cookiepolicy determines the scope of URIs that can access the cookie. We use single_host_origin if our website only has a single host name and no subdomains. The data-callback specifies a callback function. If a user clicks and grants our application access to their profile, this callback method is called, and given the one time use code along with an access token.  data-approval-prompt equal to force means the user has to login each time they access the page, and doesn't check to see if the user is signed in. Having this on is useful for debugging -->
+          <span class="g-signin"
+            data-scope="openid email"
+            data-clientid="237246576432-o25h7fmcl4mjb2nu5ubt46mukk9ijv30.apps.googleusercontent.com"
+            data-redirecturi="postmessage"
+            data-accesstype="offline"
+            data-cookiepolicy="single_host_origin"
+            data-callback="signInCallback"
+            data-approvalprompt="force">
+          </span>
+        </div>
+
+
+
+
+        <div id="result"></div>
+        
+
+<!--END GOOGLE PLUS SIGN IN BUTTON -->
+
+  </body>
+
+</html>

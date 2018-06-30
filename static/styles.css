@@ -1,0 +1,84 @@
+body {
+    font-family: sans-serif;
+    background-color: #c9d1c6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #453432;
+}
+
+h1,
+h2 {
+    font-family: 'georgia', serif;
+    margin: 0;
+}
+
+h1 {
+    border-bottom: 2px solid #eee;
+
+}
+
+h2 {
+    font-size: 22px;
+    border-bottom: 0px;
+}
+
+p,
+dd,
+dt {
+    color: #453432; 
+    margin: 0px;
+}
+
+.padding-bottom-12px {
+    padding-bottom: 12px;
+}
+
+.padding-bottom-20px {
+    padding-bottom: 20px;
+}
+
+.class {
+    border: 2px;
+}
+
+a {
+    text-decoration: none;
+    color: #453432; 
+}
+
+.edit-delete-create {
+    font-size: .75em;
+    color: #655b4e;
+    padding-bottom: 12px;
+}
+
+.pane {
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    padding: 5px;
+    margin: 5px;
+    border-color: #999999;
+    background-color: #c9d1c6;
+}
+
+.header {
+    left: 50%;
+    text-align: center;
+}
+
+.name {
+    font-size: 18px;
+}
+
+.price {
+    font-size: 12px;
+}
+
+.flash {
+    background: #cee5f5;
+}
