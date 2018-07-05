@@ -7,6 +7,15 @@ from sqlalchemy import create_engine
 # sqlalchemy classes that coorespond to tables in our db
 Base = declarative_base()
 
+# add a user class to allow us to grant users authorization make changes
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
 
 class PlaceCategory(Base):
     # inside each class, must create table representation
@@ -19,6 +28,8 @@ class PlaceCategory(Base):
         String(80), nullable=False)
     id = Column(
         Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     @property
     def serialize(self):
@@ -39,6 +50,8 @@ class Place(Base):
     category_id = Column(
         Integer, ForeignKey('place_category.id'))
     category = relationship(PlaceCategory)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     @property
     def serialize(self):
