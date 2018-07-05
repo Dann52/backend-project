@@ -10,14 +10,15 @@ Base = declarative_base()
 
 class PlaceCategory(Base):
     # inside each class, must create table representation
-    # we use __tablename__ to let sqlalchemy know the variable we will use to refer to our table
+    # we use __tablename__ to let sqlalchemy know
+    # the variable we will use to refer to our table
     __tablename__ = 'place_category'
     # mapper code
     # specify name, that it's a string up to 80 chars, and not nullable
     name = Column(
-        String(80), nullable = False)
+        String(80), nullable=False)
     id = Column(
-        Integer, primary_key = True)
+        Integer, primary_key=True)
 
     @property
     def serialize(self):
@@ -28,18 +29,16 @@ class PlaceCategory(Base):
         }
 
 
-### I can change this to LocalPlace - it can be a park, concert venue, activity 
 class Place(Base):
     __tablename__ = 'place'
     # mapper code
-    name = Column(String(80), nullable = False)
-    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable=False)
+    id = Column(Integer, primary_key=True)
     description = Column(String(250))
     price = Column(String(8))
     category_id = Column(
         Integer, ForeignKey('place_category.id'))
     category = relationship(PlaceCategory)
-
 
     @property
     def serialize(self):
@@ -51,7 +50,7 @@ class Place(Base):
         }
 
 
-## configuration code at the end of the file ##
+# configuration code at the end of the file #
 
 # create instance of the create_engine class and point to the db
 # creates a new db
