@@ -1,0 +1,59 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class = 'pane'>
+    <div class = 'header'>
+    <h1>Things to Do in Monmouth County, NJ</h1> </div>
+
+<span> <p class="edit-delete-create padding-bottom-20px">
+    <a href = '{{url_for('newCategory') }}'>
+            Create New Category </a>
+    </p> </span>
+
+
+<div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+    <!-- check to see if there are any flashed messages -->
+    {% if messages %}
+
+    {% for message in messages %}
+        <strong> {{message}} </strong>
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+{% for c in categories %}
+
+<div>
+
+    <span> <h2>
+    <a href = '{{url_for('categoryPlaces', category_id = c.id) }}'>
+            {{c.name}} </a>
+    </h2> </span>
+
+</div>
+
+{% endfor %}
+
+    
+<br><br>
+<div> <p class="edit-delete-create">
+    <a href = '{{url_for('showLogin') }}'>
+            Login to edit, delete, or create items </a>
+    </p> </div>
+
+
+</div>
+</div>
+
+</body>
+
+</html>

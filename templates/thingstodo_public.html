@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class = 'pane'>
+    <div class = 'header'>
+    <h1>{{category.name}}</h1>
+    </div>
+
+<div> <p class="edit-delete-create">
+    <a href = '{{url_for('showLogin') }}'>
+        Login to edit, delete, or create items  </a>
+    </p> </div> 
+
+
+<div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+    <!-- check to see if there are any flashed messages -->
+    {% if messages %}
+
+    {% for message in messages %}
+        <strong> {{message}} </strong>
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+{% for p in places %}
+
+<div class = 'name'> <h2>{{p.name}}</h2> </div>
+<div class = 'price'> <p> cost:  {{p.price}} </p> </div>
+<div class = 'description'> <p>{{p.description}}</p> </div>
+<br>
+
+{% endfor %}
+
+
+
+
+
+</div>
+
+
+
+
+</body>
+
+</html>

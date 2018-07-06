@@ -153,6 +153,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # check to see if user exists, if not make a new id
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -239,7 +245,10 @@ def gdisconnect():
 def categoryList():
     categories = session.query(PlaceCategory).all()
 
-    return render_template('thingstodocategories.html', categories=categories)
+    if 'username' not in login_session:
+        return render_template('thingstodocategories_public.html', categories=categories)
+    else:
+        return render_template('thingstodocategories.html', categories=categories)
 
 
 @app.route('/thingstodo/new/', methods=['GET', 'POST'])
@@ -250,7 +259,8 @@ def newCategory():
 
     if request.method == 'POST':
         # create a new item, extracting the name field from the form
-        newCategory = PlaceCategory(name=request.form['name'])
+        newCategory = PlaceCategory(name=request.form['name'], 
+                      user_id=login_session['user_id'])
         session.add(newCategory)
         session.commit()
         # after this change has been made (session commmitted)
@@ -266,6 +276,11 @@ def newCategory():
 def editPlaceCategory(category_id):
     editCategory = (session.query(PlaceCategory).
                     filter_by(id=category_id).one())
+
+    if editCategory.user_id != login_session['user_id']:
+        return "<script>function alertFunction() {alert('You are not \
+        authorized to edit this category. Please create your own category\
+        in order to edit.');}</script><body onload='alertFunction()''>"
 
     # check to make sure user is logged in, if not redirect them to login page
     if 'username' not in login_session:
@@ -295,6 +310,12 @@ def deletePlaceCategory(category_id):
     if 'username' not in login_session:
         return redirect('/login')
 
+    if deleteCategory.user_id != login_session['user_id']:
+        return "<script>function alertFunction() {alert('You are not \
+        authorized to delete this category. Please create your own\
+        category in order to be able to delete it.');}\
+        </script><body onload='alertFunction()''>"
+
     if request.method == 'POST':
 
         session.delete(deleteCategory)
@@ -315,10 +336,16 @@ def deletePlaceCategory(category_id):
 def categoryPlaces(category_id):
     category = session.query(PlaceCategory).filter_by(id=category_id).one()
 
+    creator = getUserInfo(category.user_id)
+
     places = session.query(Place).filter_by(category_id=category.id)
 
-    return render_template('thingstodo.html',
-                           category=category, places=places)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('thingstodo_public.html',
+                                category=category, places=places)
+    else: 
+        return render_template('thingstodo.html',
+                            category=category, places=places)
 
 
 # route to a create a new individual activity within a category
@@ -330,12 +357,21 @@ def newPlace(category_id):
     if 'username' not in login_session:
         return redirect('/login')
 
+    category = session.query(PlaceCategory).filter_by(id=category_id).one()
+
+    if login_session['user_id'] != category.user_id:
+        return "<script>function alertFunction() {alert('You are not\
+         authorized to add places to this category. Please create your\
+          own category in order to add places.');}\
+          </script><body onload='alertFunction()''>"
+
     if request.method == 'POST':
         # create a new place, extracting the name field from the form
         newPlace = Place(category_id=category_id)
         newPlace.name = request.form['placeName']
         newPlace.description = request.form['placeDescription']
         newPlace.price = request.form['placePrice']
+        newPlace.user_id = category.user_id
         session.add(newPlace)
         session.commit()
 
@@ -349,11 +385,20 @@ def newPlace(category_id):
            methods=['GET', 'POST'])
 def editPlace(category_id, place_id):
 
+    category = session.query(PlaceCategory).filter_by(id=category_id).one()
+
     editPlace = (session.query(Place).
                  filter_by(category_id=category_id, id=place_id).one())
 
     if 'username' not in login_session:
         return redirect('/login')
+
+
+    if login_session['user_id'] != category.user_id:
+        return "<script>function alertFunction() {alert('You are not\
+         authorized to edit places in this category. Please create your\
+          own category in order to edit places.');}\
+          </script><body onload='alertFunction()''>"
 
     if request.method == 'POST':
 
@@ -390,9 +435,16 @@ def editPlace(category_id, place_id):
 def deletePlace(category_id, place_id):
     deletePlace = (session.query(Place).
                    filter_by(category_id=category_id, id=place_id).one())
+    category = session.query(PlaceCategory).filter_by(id=category_id).one()
 
     if 'username' not in login_session:
         return redirect('/login')
+
+    if login_session['user_id'] != category.user_id:
+        return "<script>function alertFunction() {alert('You are not\
+         authorized to delete places in this category. Please\
+          create your own category in order to delete places.');}\
+          </script><body onload='alertFunction()''>"
 
     if request.method == 'POST':
         session.delete(deletePlace)
