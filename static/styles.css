@@ -45,6 +45,14 @@ dt {
     border: 2px;
 }
 
+.logout {
+    float: right;
+}
+
+.home {
+    float: right;
+}
+
 a {
     text-decoration: none;
     color: #453432; 

@@ -204,17 +204,17 @@ def gdisconnect():
     access_token = login_session.get('access_token')
     # if access_token is empty, we don't have a record of the user
     if access_token is None:
-        print 'Access Token is None'
-        response = make_response(json.dumps('Current user\
-                   not connected.'), 401)
+        # print 'Access Token is None'
+        response = make_response(json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
+    #print 'In gdisconnect credentials are %s', credentials
+    #print 'User name is: '
+    #print login_session['username']
+
     # pass the access token into google's url for revoking tokens
     url = ('https://accounts.google.com/o/oauth2/revoke?token=%s'
-           % login_session['access_token'])
+           % access_token)
     h = httplib2.Http()
     # store google's response in an object called result
     result = h.request(url, 'GET')[0]
@@ -229,8 +229,10 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
         # make response to indicate user successfully logged out of the session
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        # response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response = redirect(url_for('categoryList'))
         response.headers['Content-Type'] = 'application/json'
+        flash("You have successfully logged out")
         return response
     else:
         response = (make_response(json.dumps
@@ -277,7 +279,7 @@ def editPlaceCategory(category_id):
     editCategory = (session.query(PlaceCategory).
                     filter_by(id=category_id).one())
 
-    if editCategory.user_id != login_session['user_id']:
+    if editCategory.user_id != login_session.get('user_id'):
         return "<script>function alertFunction() {alert('You are not \
         authorized to edit this category. Please create your own category\
         in order to edit.');}</script><body onload='alertFunction()''>"
@@ -310,7 +312,7 @@ def deletePlaceCategory(category_id):
     if 'username' not in login_session:
         return redirect('/login')
 
-    if deleteCategory.user_id != login_session['user_id']:
+    if deleteCategory.user_id != login_session.get('user_id'):
         return "<script>function alertFunction() {alert('You are not \
         authorized to delete this category. Please create your own\
         category in order to be able to delete it.');}\
@@ -334,18 +336,19 @@ def deletePlaceCategory(category_id):
 # route to an individual activity
 @app.route('/thingstodo/<int:category_id>/')
 def categoryPlaces(category_id):
+    print(login_session.get('user_id'))
     category = session.query(PlaceCategory).filter_by(id=category_id).one()
 
     creator = getUserInfo(category.user_id)
 
     places = session.query(Place).filter_by(category_id=category.id)
 
-    if 'username' not in login_session or creator.id != login_session['user_id']:
+    if 'username' not in login_session or creator.id != login_session.get('user_id'):
         return render_template('thingstodo_public.html',
-                                category=category, places=places)
+                                category=category, places=places, creator=creator)
     else: 
         return render_template('thingstodo.html',
-                            category=category, places=places)
+                            category=category, places=places, creator=creator)
 
 
 # route to a create a new individual activity within a category
@@ -359,7 +362,7 @@ def newPlace(category_id):
 
     category = session.query(PlaceCategory).filter_by(id=category_id).one()
 
-    if login_session['user_id'] != category.user_id:
+    if login_session.get('user_id') != category.user_id:
         return "<script>function alertFunction() {alert('You are not\
          authorized to add places to this category. Please create your\
           own category in order to add places.');}\
@@ -394,7 +397,7 @@ def editPlace(category_id, place_id):
         return redirect('/login')
 
 
-    if login_session['user_id'] != category.user_id:
+    if login_session.get('user_id') != category.user_id:
         return "<script>function alertFunction() {alert('You are not\
          authorized to edit places in this category. Please create your\
           own category in order to edit places.');}\
@@ -440,7 +443,7 @@ def deletePlace(category_id, place_id):
     if 'username' not in login_session:
         return redirect('/login')
 
-    if login_session['user_id'] != category.user_id:
+    if login_session.get('user_id') != category.user_id:
         return "<script>function alertFunction() {alert('You are not\
          authorized to delete places in this category. Please\
           create your own category in order to delete places.');}\

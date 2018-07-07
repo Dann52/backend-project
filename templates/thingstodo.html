@@ -11,9 +11,17 @@
     <h1>{{category.name}}</h1>
     </div>
 
-    <div class="edit-delete-create padding-bottom-20px">
-    <a href = '{{url_for('newPlace', category_id = category.id) }}'>
-    Create New Item</a> </div>
+    <div class ="padding-bottom-20px">
+    <span class="edit-delete-create">
+        <a href = '{{url_for('newPlace', category_id = category.id) }}'>
+        Create New Item</a> </span>
+    
+        <span class="edit-delete-create home">
+            <a href = '{{url_for('categoryList') }}'>
+                        Return Home </a> </span>
+    </div>
+
+    
 
 <div class = 'flash'>
     {% with messages = get_flashed_messages() %}
@@ -44,6 +52,14 @@
 
 
 {% endfor %}
+
+
+<div><p class="edit-delete-create logout">
+    <a href = '{{url_for('gdisconnect') }}'>
+            Logout </a>
+    </p> </div>
+
+
 
 </div>
 

@@ -11,10 +11,17 @@
     <h1>{{category.name}}</h1>
     </div>
 
-<div> <p class="edit-delete-create">
+<div class="padding-bottom-20px"> 
+    <span class="edit-delete-create">
     <a href = '{{url_for('showLogin') }}'>
         Login to edit, delete, or create items  </a>
-    </p> </div> 
+    </span> 
+
+    <span class="edit-delete-create home">
+        <a href = '{{url_for('categoryList') }}'>
+                    Return Home </a> </span>
+
+</div> 
 
 
 <div class = 'flash'>
