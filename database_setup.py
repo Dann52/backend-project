@@ -36,7 +36,7 @@ class PlaceCategory(Base):
         # add the serialize function to return object for JSON data
         return {
             'name': self.name,
-            'id': self.id,
+            'id': self.id
         }
 
 
@@ -59,7 +59,7 @@ class Place(Base):
             'name': self.name,
             'description': self.description,
             'id': self.id,
-            'price': self.price,
+            'price': self.price
         }
 
 

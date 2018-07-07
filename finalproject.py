@@ -205,12 +205,10 @@ def gdisconnect():
     # if access_token is empty, we don't have a record of the user
     if access_token is None:
         # print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(json.dumps('Current\
+                   user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    #print 'In gdisconnect credentials are %s', credentials
-    #print 'User name is: '
-    #print login_session['username']
 
     # pass the access token into google's url for revoking tokens
     url = ('https://accounts.google.com/o/oauth2/revoke?token=%s'
@@ -229,7 +227,7 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
         # make response to indicate user successfully logged out of the session
-        # response = make_response(json.dumps('Successfully disconnected.'), 200)
+
         response = redirect(url_for('categoryList'))
         response.headers['Content-Type'] = 'application/json'
         flash("You have successfully logged out")
@@ -248,9 +246,11 @@ def categoryList():
     categories = session.query(PlaceCategory).all()
 
     if 'username' not in login_session:
-        return render_template('thingstodocategories_public.html', categories=categories)
+        return render_template('thingstodocategories_public.html',
+                               categories=categories)
     else:
-        return render_template('thingstodocategories.html', categories=categories)
+        return render_template('thingstodocategories.html',
+                               categories=categories)
 
 
 @app.route('/thingstodo/new/', methods=['GET', 'POST'])
@@ -261,8 +261,8 @@ def newCategory():
 
     if request.method == 'POST':
         # create a new item, extracting the name field from the form
-        newCategory = PlaceCategory(name=request.form['name'], 
-                      user_id=login_session['user_id'])
+        newCategory = PlaceCategory(name=request.form['name'],
+                                    user_id=login_session['user_id'])
         session.add(newCategory)
         session.commit()
         # after this change has been made (session commmitted)
@@ -343,12 +343,17 @@ def categoryPlaces(category_id):
 
     places = session.query(Place).filter_by(category_id=category.id)
 
-    if 'username' not in login_session or creator.id != login_session.get('user_id'):
-        return render_template('thingstodo_public.html',
-                                category=category, places=places, creator=creator)
-    else: 
+    if ('username' not in login_session or
+        creator.id != login_session.get('user_id')):
+            return render_template('thingstodo_public.html',
+                                   category=category,
+                                   places=places,
+                                   creator=creator)
+    else:
         return render_template('thingstodo.html',
-                            category=category, places=places, creator=creator)
+                               category=category,
+                               places=places,
+                               creator=creator)
 
 
 # route to a create a new individual activity within a category
@@ -395,7 +400,6 @@ def editPlace(category_id, place_id):
 
     if 'username' not in login_session:
         return redirect('/login')
-
 
     if login_session.get('user_id') != category.user_id:
         return "<script>function alertFunction() {alert('You are not\
