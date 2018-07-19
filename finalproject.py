@@ -46,7 +46,8 @@ APPLICATION_NAME = "Things To Do Application"
 # the create engine function lets our program know
 # which db engine we want to communicate with
 engine = create_engine(
-                        'sqlite:///places.db',
+                        'postgresql://catalog:catalog@\
+                        localhost/catalog',
                         connect_args={'check_same_thread': False})
 
 # makes the connection between our class definitions,

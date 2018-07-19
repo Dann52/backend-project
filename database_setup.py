@@ -68,6 +68,7 @@ class Place(Base):
 # create instance of the create_engine class and point to the db
 # creates a new db
 engine = create_engine(
-    'sqlite:///places.db')
+        'postgresql://catalog:catalog@localhost/catalog')
+
 
 Base.metadata.create_all(engine)
