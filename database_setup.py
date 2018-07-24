@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
 
 # sqlalchemy classes that coorespond to tables in our db
 Base = declarative_base()
@@ -45,8 +46,8 @@ class Place(Base):
     # mapper code
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
-    description = Column(String(250))
-    price = Column(String(8))
+    description = Column(String(700))
+    price = Column(String(40))
     category_id = Column(
         Integer, ForeignKey('place_category.id'))
     category = relationship(PlaceCategory)
@@ -68,6 +69,8 @@ class Place(Base):
 # create instance of the create_engine class and point to the db
 # creates a new db
 engine = create_engine(
-    'sqlite:///places.db')
+    'postgresql://catalog:catalog@localhost:5432/catalogdb')
+if not database_exists(engine.url):
+     create_database(engine.url)
 
 Base.metadata.create_all(engine)
