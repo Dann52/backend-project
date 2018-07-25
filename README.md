@@ -2,7 +2,8 @@
  This project takes the Udacity Catalog Project and configures it on an Amazon Lightsail Ubuntu web server. 
 
 # IP Address
-34.238.241.124
+ - 34.238.241.124
+ - SSH Port 2200
 
 # URL to access the site 
 http://34.238.241.124.xip.io/login
