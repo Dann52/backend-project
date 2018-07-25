@@ -84,7 +84,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('/var/www/catalog/catalog/client_secrets.json', scope='')
         # specify with postmessage that this is the
         # one time code flow the server will be sending off
         oauth_flow.redirect_uri = 'postmessage'
