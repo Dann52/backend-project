@@ -2,11 +2,11 @@
  This project takes the Udacity Catalog Project and configures it on an Amazon Lightsail Ubuntu web server. 
 
 # IP Address
- - 34.238.241.124
+ - 18.206.157.137
  - SSH Port 2200
 
 # URL to access the site 
-http://34.238.241.124.xip.io/login
+http://18.206.157.137.xip.io
   - note: The website must be access via this xip.io url in order for OAuth to function. 
 
 # Summary of Software installed
@@ -32,6 +32,7 @@ http://34.238.241.124.xip.io/login
   - configured key-based authentication for ubuntu and grader users on ubuntu server.  Disabled password login.
   - disabled pubkey authentication to disallow passwordless login. 
   - configured ssh port to 2200
+  - configured and enabled ufw firewall
 
 # Third party resources used to complete the project
  - Udacity forums
