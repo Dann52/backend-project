@@ -30,6 +30,7 @@ http://34.238.241.124.xip.io/login
   - catalog.wsgi: Provides configuration for hosting python application on the server.
   - configured time zone to UTC.
   - configured key-based authentication for ubuntu and grader users on ubuntu server.  Disabled password login.
+  - disabled pubkey authentication to disallow passwordless login. 
   - configured ssh port to 2200
 
 # Third party resources used to complete the project
